@@ -1,0 +1,102 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netstandard2.1</TargetFramework>
+    <AssemblyName>MarshallKamura</AssemblyName>
+    <Product>Marshall Kamura</Product>
+    <Version>1.0.0</Version>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+    <LangVersion>latest</LangVersion>
+    <RestoreAdditionalProjectSources>
+      https://api.nuget.org/v3/index.json;
+      https://nuget.bepinex.dev/v3/index.json;
+      https://nuget.samboy.dev/v3/index.json
+    </RestoreAdditionalProjectSources>
+    <RootNamespace>KamuraPrime</RootNamespace>
+
+	<GamePath Condition="'$(OS)' == 'Windows_NT'">C:/_Stuff/Games/INARI Demo</GamePath>
+	<DllPath>$(GamePath)/Inari_Data/Managed</DllPath>
+	<CopyDir>$(GamePath)/BepInEx/scripts</CopyDir>
+  </PropertyGroup>
+
+  <ItemGroup>
+	  <Reference Include="AllIn1SpriteShaderAssembly">
+	    <HintPath>$(DllPath)/AllIn1SpriteShaderAssembly.dll</HintPath>
+	  </Reference>
+	  <Reference Include="Assembly-CSharp">
+	    <HintPath>$(DllPath)/Assembly-CSharp.dll</HintPath>
+	  </Reference>
+	  <Reference Include="FMODUnity">
+	    <HintPath>$(DllPath)/FMODUnity.dll</HintPath>
+	  </Reference>
+	  <Reference Include="Unity.InputSystem">
+	    <HintPath>$(DllPath)/Unity.InputSystem.dll</HintPath>
+	  </Reference>
+	  <Reference Include="Unity.InputSystem.ForUI">
+	    <HintPath>$(DllPath)/Unity.InputSystem.ForUI.dll</HintPath>
+	  </Reference>
+	  <Reference Include="Unity.RenderPipelines.Core.Runtime">
+	    <HintPath>$(DllPath)/Unity.RenderPipelines.Core.Runtime.dll</HintPath>
+	  </Reference>
+	  <Reference Include="Unity.TextMeshPro">
+	    <HintPath>$(DllPath)/Unity.TextMeshPro.dll</HintPath>
+	  </Reference>
+	  <Reference Include="UnityEngine">
+	    <HintPath>$(DllPath)/UnityEngine.dll</HintPath>
+	  </Reference>
+	  <Reference Include="UnityEngine.AnimationModule">
+	    <HintPath>$(DllPath)/UnityEngine.AnimationModule.dll</HintPath>
+	  </Reference>
+	  <Reference Include="UnityEngine.CoreModule">
+	    <HintPath>$(DllPath)/UnityEngine.CoreModule.dll</HintPath>
+	  </Reference>
+	  <Reference Include="UnityEngine.IMGUIModule">
+	    <HintPath>$(DllPath)/UnityEngine.IMGUIModule.dll</HintPath>
+	  </Reference>
+	  <Reference Include="UnityEngine.InputLegacyModule">
+	    <HintPath>$(DllPath)/UnityEngine.InputLegacyModule.dll</HintPath>
+	  </Reference>
+	  <Reference Include="UnityEngine.InputModule">
+	    <HintPath>$(DllPath)/UnityEngine.InputModule.dll</HintPath>
+	  </Reference>
+	  <Reference Include="UnityEngine.ParticleSystemModule">
+	    <HintPath>$(DllPath)/UnityEngine.ParticleSystemModule.dll</HintPath>
+	  </Reference>
+	  <Reference Include="UnityEngine.Physics2DModule">
+	    <HintPath>$(DllPath)/UnityEngine.Physics2DModule.dll</HintPath>
+	  </Reference>
+	  <Reference Include="UnityEngine.TextRenderingModule">
+	    <HintPath>$(DllPath)/UnityEngine.TextRenderingModule.dll</HintPath>
+	  </Reference>
+	  <Reference Include="UnityEngine.UI">
+	    <HintPath>$(DllPath)/UnityEngine.UI.dll</HintPath>
+	  </Reference>
+	  <Reference Include="UnityEngine.UIElementsModule">
+	    <HintPath>$(DllPath)/UnityEngine.UIElementsModule.dll</HintPath>
+	  </Reference>
+	  <Reference Include="UnityEngine.UIModule">
+	    <HintPath>$(DllPath)/UnityEngine.UIModule.dll</HintPath>
+	  </Reference>
+	</ItemGroup>
+	
+  <ItemGroup>
+    <PackageReference Include="BepInEx.Analyzers" Version="1.*" PrivateAssets="all" />
+    <PackageReference Include="BepInEx.Core" Version="5.*" />
+    <PackageReference Include="BepInEx.PluginInfoProps" Version="2.*" />
+  </ItemGroup>
+  
+  <ItemGroup Condition="'$(TargetFramework.TrimEnd(`0123456789`))' == 'net'">
+    <PackageReference Include="Microsoft.NETFramework.ReferenceAssemblies" Version="1.0.2" PrivateAssets="all" />
+  </ItemGroup>
+
+	<Target Name="CopyMod" AfterTargets="PostBuildEvent" Condition="'$(CopyDir)' != ''">
+		<Message Importance="high" Text="copying $(TargetPath) to $(CopyDir) ..." />
+		<Copy SourceFiles="$(TargetPath)" DestinationFolder="$(CopyDir)" SkipUnchangedFiles="true" />
+		<Copy SourceFiles="$(TargetDir)$(TargetName).pdb" DestinationFolder="$(CopyDir)" SkipUnchangedFiles="true" />
+	</Target>
+
+	<Target Name="PackageMod" AfterTargets="Publish">
+		<Copy SourceFiles="$(TargetPath)" DestinationFolder="../thunderstore/build/dll" SkipUnchangedFiles="true" />
+		<Exec Command="tcli build --config-path ../thunderstore/thunderstore.toml" />
+	</Target>
+</Project>
