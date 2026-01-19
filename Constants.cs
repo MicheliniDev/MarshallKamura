@@ -27,7 +27,7 @@ namespace KamuraPrime
         public const float ARENA_X_MAX_POS = 2438f;
         public const float ARENA_X_MIN_POS = 2401f;
 
-        public const int BULLET_PRELOAD_COUNT = 200;
+        public const int BULLET_PRELOAD_COUNT = 300;
         public const float BULLET_HOME_STRENGTH = 500f;
         public const string STICKY_BOMB_PROJECTILE_NAME = "StickyBomb";
         public const string BULLET_PROJECTILE_NAME = "Bullet";

@@ -1,22 +1,23 @@
 ﻿using HarmonyLib;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.InputSystem;
 using UnityEngine.Pool;
 
 namespace KamuraPrime.Patches
 {
     [HarmonyPatch]
-    public class ProjectilePoolPatches
+    public class PoolPatches
     {
         [HarmonyPostfix]
         [HarmonyPatch(typeof(ProjectilePoolingManager), "OnProfileLoaded")]
-        public static void PreloadExtraBullets(ProjectilePoolingManager __instance)
+        public static void PreloadExtraBullets(ref ProjectilePoolingManager __instance)
         {
             var pools = Traverse.Create(__instance)
                                     .Field<Dictionary<string, ObjectPool<Projectile>>>("objectPools")
                                     .Value;
 
-            if (pools != null && pools.ContainsKey(Constants.BULLET_PROJECTILE_NAME))
+            if (pools.ContainsKey(Constants.BULLET_PROJECTILE_NAME))
             {
                 Transform poolParent = GameManager.Instance.transform;
 
@@ -35,7 +36,6 @@ namespace KamuraPrime.Patches
                 if (projectile != null)
                 {
                     projectile.transform.SetParent(parent);
-                    projectile.gameObject.SetActive(false);
                     buffer.Add(projectile);
                 }
             }

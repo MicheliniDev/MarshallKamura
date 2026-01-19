@@ -31,10 +31,6 @@ namespace KamuraPrime.YieldInstructions
                     return false;
 
                 var clipInfo = animator.GetCurrentAnimatorClipInfo(layer);
-
-                if (clipInfo.Length == 0) 
-                    return false;
-
                 var clip = clipInfo[0].clip;
                 var stateInfo = animator.GetCurrentAnimatorStateInfo(layer);
 

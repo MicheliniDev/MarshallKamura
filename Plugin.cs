@@ -97,11 +97,12 @@ public class Plugin : BaseUnityPlugin
         bomb.transform.position = runner.blackboard.transform.position;
         bomb.GetComponent<StickyBomb>().Shoot(9999, Vector2.zero, 10f, runner.blackboard);
    
-        if (IsP2 && spawnStickyBombP2.Value) return;
-
-        var playerBomb = poolManager.Pop(STICKY_BOMB_PROJECTILE_NAME);
-        playerBomb.transform.position = GameManager.Instance.PlayerStateMachine.transform.position;
-        playerBomb.GetComponent<StickyBomb>().Shoot(9999, Vector2.zero, 10f, runner.blackboard);
+        if (IsP2 && spawnStickyBombP2.Value)
+        {
+            var playerBomb = poolManager.Pop(STICKY_BOMB_PROJECTILE_NAME);
+            playerBomb.transform.position = GameManager.Instance.PlayerStateMachine.transform.position;
+            playerBomb.GetComponent<StickyBomb>().Shoot(9999, Vector2.zero, 10f, runner.blackboard);
+        }
     }
 
     public void InitializeBoss()
